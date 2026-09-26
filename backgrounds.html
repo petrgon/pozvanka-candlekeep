@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candlekeep Mysteries - Character Backgrounds Library</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700;900&family=MedievalSharp&family=Tangerine:wght@700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .font-header { font-family: 'Cinzel Decorative', serif; }
+        .font-title { font-family: 'Cinzel', serif; }
+        .font-body { font-family: 'Cormorant Garamond', serif; }
+        .font-signature { font-family: 'Tangerine', cursive; }
+        .font-medieval { font-family: 'MedievalSharp', cursive; }
+
+        body {
+            background-color: #0d0705;
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(255, 153, 51, 0.15) 0%, rgba(13, 7, 5, 0.95) 75%),
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 2px, transparent 2px, transparent 4px),
+                linear-gradient(180deg, #180b06 0%, #080302 100%);
+            min-height: 100vh;
+            color: #2c1d11;
+            overflow-x: hidden;
+        }
+
+        .candle-glow {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 60vh;
+            background: radial-gradient(circle, rgba(255, 170, 70, 0.18) 0%, rgba(210, 105, 30, 0.08) 45%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            animation: flicker 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.98); }
+            25% { opacity: 1; transform: translate(-49%, -51%) scale(1.02); }
+            50% { opacity: 0.85; transform: translate(-51%, -49%) scale(0.99); }
+            75% { opacity: 0.95; transform: translate(-50%, -52%) scale(1.01); }
+            100% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.0); }
+        }
+
+        .parchment {
+            background: #e8d3a7;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.3) 0%, rgba(180, 140, 90, 0.2) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.12'/%3E%3C/svg%3E");
+            box-shadow: 
+                0 0 35px rgba(0, 0, 0, 0.9),
+                inset 0 0 80px rgba(90, 50, 20, 0.45),
+                inset 0 0 20px rgba(60, 30, 10, 0.6);
+            border: 2px solid rgba(80, 40, 15, 0.5);
+        }
+
+        .parchment-card {
+            background: rgba(232, 211, 167, 0.85);
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, rgba(180, 140, 90, 0.15) 100%);
+            border: 1px solid rgba(120, 70, 30, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .parchment-card:hover, .parchment-card.active-card {
+            background: #f2e2ba;
+            border-color: #8b0000;
+            box-shadow: 0 4px 15px rgba(107, 9, 16, 0.25), inset 0 0 15px rgba(180, 140, 90, 0.3);
+        }
+
+        .drop-cap {
+            float: left;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 3.2rem;
+            line-height: 0.8;
+            padding-top: 4px;
+            padding-right: 8px;
+            padding-left: 2px;
+            color: #6b0910;
+        }
+
+        .rolled-highlight {
+            background-color: rgba(218, 165, 32, 0.3) !important;
+            border-left: 4px solid #8b0000 !important;
+            font-weight: bold;
+            transition: background-color 0.4s ease, border-left 0.4s ease;
+        }
+
+        /* Custom Scrollbar for Tome List */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(20, 10, 5, 0.6);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5c3016;
+            border-radius: 4px;
+            border: 1px solid #8b5a2b;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8b4513;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-8 relative selection:bg-amber-900 selection:text-amber-100 flex flex-col min-h-screen">
+
+    <div class="candle-glow"></div>
+
+    <!-- Top Action & Navigation Header -->
+    <header class="no-print z-50 flex flex-wrap items-center justify-between w-full max-w-6xl mx-auto mb-6 px-4 py-3 bg-black/75 backdrop-blur-md rounded-xl border border-amber-900/50 text-amber-200 text-sm shadow-2xl gap-3">
+        <div class="flex items-center space-x-3">
+            <a href="index.html" class="px-3.5 py-1.5 rounded-lg bg-amber-950 hover:bg-amber-900 border border-amber-700/60 text-amber-200 text-xs md:text-sm font-medieval flex items-center gap-2 transition hover:scale-105">
+                <i class="fa-solid fa-scroll text-amber-400"></i>
+                <span>📜 Return to Scroll</span>
+            </a>
+            <div class="hidden sm:flex items-center gap-2 border-l border-amber-900/60 pl-3">
+                <i class="fa-solid fa-book-open-reader text-amber-500"></i>
+                <span class="font-title text-amber-300 font-bold tracking-wider uppercase text-xs md:text-sm">Candlekeep Backgrounds</span>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-2 my-1">
+            <button id="sound-toggle-btn" onclick="toggleAudio()" class="px-3 py-1.5 rounded-lg bg-amber-950/80 hover:bg-amber-900 border border-amber-700/50 text-amber-200 text-xs flex items-center gap-2 transition">
+                <i id="sound-icon" class="fa-solid fa-volume-high text-amber-400"></i>
+                <span id="sound-text">Sound ON</span>
+            </button>
+            <button onclick="toggleFullscreen()" class="px-3 py-1.5 rounded-lg bg-amber-950/80 hover:bg-amber-900 border border-amber-700/50 text-amber-200 text-xs flex items-center gap-2 transition">
+                <i class="fa-solid fa-expand text-amber-400"></i>
+                <span class="hidden md:inline">Fullscreen</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container Grid -->
+    <main class="relative z-20 w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 mb-8">
+        
+        <!-- LEFT COLUMN: Search, Filters & Background List -->
+        <section class="lg:col-span-5 flex flex-col space-y-4">
+            
+            <!-- Search & Filter Controls Panel -->
+            <div class="p-4 bg-black/60 backdrop-blur-md rounded-xl border border-amber-900/50 shadow-xl space-y-3">
+                <!-- Search Input -->
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/70 text-sm"></i>
+                    <input type="text" id="search-input" oninput="filterBackgrounds()" placeholder="Search skills, tools, features..." class="w-full bg-amber-950/40 border border-amber-800/60 rounded-lg pl-9 pr-3 py-2 text-amber-100 placeholder-amber-600/70 text-sm font-body focus:outline-none focus:border-amber-500 transition">
+                </div>
+
+                <!-- Category Chips -->
+                <div class="flex flex-wrap gap-1.5 text-xs font-medieval" id="filter-chips">
+                    <button onclick="setCategoryFilter('all')" class="chip-btn active-chip px-2.5 py-1 rounded-md bg-amber-900/80 text-amber-200 border border-amber-600/60 transition" data-category="all">All (10)</button>
+                    <button onclick="setCategoryFilter('Arcane & Dreams')" class="chip-btn px-2.5 py-1 rounded-md bg-black/40 text-amber-400/80 border border-amber-900/40 hover:bg-amber-950 transition" data-category="Arcane & Dreams">Arcane</button>
+                    <button onclick="setCategoryFilter('Vaults & Stealth')" class="chip-btn px-2.5 py-1 rounded-md bg-black/40 text-amber-400/80 border border-amber-900/40 hover:bg-amber-950 transition" data-category="Vaults & Stealth">Vaults</button>
+                    <button onclick="setCategoryFilter('Crafts & Binding')" class="chip-btn px-2.5 py-1 rounded-md bg-black/40 text-amber-400/80 border border-amber-900/40 hover:bg-amber-950 transition" data-category="Crafts & Binding">Crafts</button>
+                    <button onclick="setCategoryFilter('Social & Lore')" class="chip-btn px-2.5 py-1 rounded-md bg-black/40 text-amber-400/80 border border-amber-900/40 hover:bg-amber-950 transition" data-category="Social & Lore">Social</button>
+                </div>
+            </div>
+
+            <!-- Background Cards List -->
+            <div id="backgrounds-list" class="space-y-3 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+                <!-- Javascript will inject background cards here -->
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: Grimoire Parchment Tome Display -->
+        <section id="detail-section" class="lg:col-span-7">
+            <div id="tome-display" class="parchment rounded-xl p-6 md:p-8 min-h-[600px] shadow-2xl relative flex flex-col justify-between">
+                <!-- Javascript will populate background detail content here -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Notification Overlay -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-amber-950 text-amber-200 border border-amber-600/80 px-4 py-3 rounded-xl shadow-2xl font-medieval text-sm flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-amber-400 text-lg"></i>
+        <span id="toast-msg">Text copied to clipboard!</span>
+    </div>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        const BACKGROUNDS_DATA = [
+            {
+                id: "dream-script-archivist",
+                title: "Dream-Script Archivist",
+                category: "Arcane & Dreams",
+                icon: "fa-moon",
+                quote: "While many study texts of the waking world, you walk in sleep with pen in hand, capturing truths that elude the conscious mind.",
+                skills: ["Arcana", "Religion"],
+                tools: ["Calligrapher's supplies"],
+                languages: ["Common", "One of your choice"],
+                equipment: "Journal of dream-recordings, moonlit shimmering inkpot, sleep mask bearing arcane sigils, scroll case of unfinished dream-translations, 5 gp",
+                featureName: "Sleep-Walked Knowledge",
+                featureDesc: "While resting, you may recall fragments of useful information tied to your current goals or questions, as though drawn from beyond. The DM may offer you cryptic clues, imagery, or phrases based on topics you have recently studied or encountered, delivered as part of a dream or vision.",
+                traits: [
+                    "I treat dreams as more real than the waking world.",
+                    "I speak in poetic riddles, often unintentionally.",
+                    "I always carry a quill, even in sleep.",
+                    "I am guided by visions no one else sees.",
+                    "I find connections others call coincidence.",
+                    "I wake suddenly to scribble strange truths."
+                ],
+                ideals: [
+                    "Inspiration: Dreams are the truest source of wisdom.",
+                    "Mystery: Not all knowledge must be understood.",
+                    "Faith: I believe my dreams are sent from a higher power.",
+                    "Revelation: Hidden truths emerge when we least expect.",
+                    "Balance: Knowledge of mind and soul must coexist.",
+                    "Duty: I record so others might one day understand."
+                ],
+                bonds: [
+                    "My dream-journal was stolen, and I must recover it.",
+                    "I once foresaw a disaster and failed to prevent it.",
+                    "My teacher vanished into a dream they could not wake from.",
+                    "I believe Candlekeep itself dreams, and I interpret its thoughts.",
+                    "My dreams are haunted by a repeated phrase I cannot decipher.",
+                    "I am protecting someone marked by a dream-prophecy."
+                ],
+                flaws: [
+                    "I find it hard to tell dream from memory.",
+                    "I often speak aloud while dreaming.",
+                    "I trust visions over facts.",
+                    "I keep secrets I don't understand.",
+                    "I refuse to sleep near others.",
+                    "I become obsessed with interpreting symbols."
+                ]
+            },
+            {
+                id: "gatewarden-acolyte",
+                title: "Gatewarden Acolyte",
+                category: "Social & Lore",
+                icon: "fa-shield-halved",
+                quote: "You served among Candlekeep's defenders, managing visitors, verifying credentials, and diffusing volatile personalities at the front gates.",
+                skills: ["Insight", "History"],
+                tools: ["Gaming set or forgery kit"],
+                languages: ["Common", "One of your choice"],
+                equipment: "Badge of station from Candlekeep, worn ledger of admissions and infractions, ink-stained gloves, calling card from a banned scholar, 10 gp",
+                featureName: "Bureaucratic Acumen",
+                featureDesc: "You are familiar with the inner workings of administrative systems, especially within academic or monastic institutions. You can gain access to records, secure audiences, or navigate red tape more easily than others. If a location has a paper trail, you can usually follow or forge it.",
+                traits: [
+                    "I memorise rules for fun.",
+                    "I keep everything filed and categorised.",
+                    "I trust policies more than people.",
+                    "I never forget a face or a name.",
+                    "I believe information should be earned.",
+                    "I ask questions no one wants to answer."
+                ],
+                ideals: [
+                    "Order: There is a system to everything.",
+                    "Duty: Candlekeep's gates must be guarded in every way.",
+                    "Truth: Bureaucracy reveals as much as it conceals.",
+                    "Secrecy: Not every guest deserves the full story.",
+                    "Loyalty: I protect my own, even from themselves.",
+                    "Fairness: Every voice deserves to be heard."
+                ],
+                bonds: [
+                    "I once stopped a spy with only my wits and a quill.",
+                    "Someone I trusted used their access for betrayal.",
+                    "A guest gave me a book that changed my life.",
+                    "I owe my post to a mentor I disappointed.",
+                    "I uncovered a mystery still unsolved.",
+                    "I was expelled from my station unjustly."
+                ],
+                flaws: [
+                    "I cannot resist reading personal correspondence.",
+                    "I see conspiracy behind every application.",
+                    "I often correct others without being asked.",
+                    "I panic without structure.",
+                    "I make false promises to gain trust.",
+                    "I worry I forged something long ago that matters now."
+                ]
+            },
+            {
+                id: "scrivener-deep-vaults",
+                title: "Scrivener of the Deep Vaults",
+                category: "Vaults & Stealth",
+                icon: "fa-dungeon",
+                quote: "You served in Candlekeep's lowest vaults, where few tread and fewer return unchanged, brushing against forbidden lore.",
+                skills: ["Investigation", "Arcana"],
+                tools: ["Artisan's tools used in restoration"],
+                languages: ["Common", "One of your choice"],
+                equipment: "Key to a vault you no longer access, waxed scroll case, reagent-stained gloves, mysterious note in your own handwriting you don't remember writing, 15 gp",
+                featureName: "Echoes of Forbidden Lore",
+                featureDesc: "When you recall information about secret, ancient, or forbidden topics, the DM may provide you with additional details or insight as a flash of buried memory. You also instinctively recognise when a book or text carries a magical curse, though you may not know the exact nature without further study.",
+                traits: [
+                    "I speak slowly, choosing each word with care.",
+                    "I maintain obsessive records of everything I encounter.",
+                    "I shun daylight after so long in the dark.",
+                    "I talk to books like they are people.",
+                    "I'm always listening for voices no one else hears.",
+                    "I hoard secrets even from friends."
+                ],
+                ideals: [
+                    "Discovery: The truth is worth any price.",
+                    "Secrecy: Some knowledge must be hidden.",
+                    "Vigilance: I must ensure no evil escapes the vaults.",
+                    "Duty: I protected Candlekeep in my own way.",
+                    "Wisdom: Understanding is more than knowledge.",
+                    "Balance: Light and shadow must be held in check."
+                ],
+                bonds: [
+                    "I once glimpsed a name that should not be spoken.",
+                    "A text I sealed away has gone missing.",
+                    "The vaults were my sanctuary, and I long to return.",
+                    "I carry a scar from a book that fought back.",
+                    "I owe my life to an unknown author.",
+                    "My dreams are haunted by what I read."
+                ],
+                flaws: [
+                    "I trust no one with important secrets.",
+                    "I believe I am being watched.",
+                    "I sometimes forget what is real.",
+                    "I am tempted to read any book, no matter the warnings.",
+                    "I've burned pages I could not understand.",
+                    "I carry too many secrets."
+                ]
+            },
+            {
+                id: "scripture-binder",
+                title: "Scripture Binder",
+                category: "Crafts & Binding",
+                icon: "fa-book-bookmark",
+                quote: "Trained to rebind ancient manuscripts, you pieced together secrets no one else noticed while preserving the sacred integrity of the word.",
+                skills: ["History", "Sleight of Hand"],
+                tools: ["Bookbinding tools"],
+                languages: ["Common", "One of your choice"],
+                equipment: "Leather-bound toolkit, folded page containing a secret annotation, thread spool of silver filament, magnifying lens, 10 gp",
+                featureName: "Restorative Precision",
+                featureDesc: "You can identify the age, origin, and authorial style of most written materials after one minute of study. When restoring or altering a document, you can do so without leaving evidence unless magic was involved in its creation. You also have an eye for forgeries, even subtle ones.",
+                traits: [
+                    "I treat every book like it's alive.",
+                    "I find great joy in small details.",
+                    "I speak quietly and handle things gently.",
+                    "I prefer old texts to new ones.",
+                    "I often correct misquotes without thinking.",
+                    "I collect scraps of parchment for no reason."
+                ],
+                ideals: [
+                    "Preservation: Every work deserves to survive.",
+                    "Respect: Words are sacred, no matter the author.",
+                    "Tradition: The old ways guide us still.",
+                    "Accuracy: Even a single letter matters.",
+                    "Curiosity: I want to know the stories behind the stories.",
+                    "Legacy: I wish to bind a work that outlives me."
+                ],
+                bonds: [
+                    "A book I restored was stolen before it could be read.",
+                    "I once found a secret page bound into a holy text.",
+                    "A ghost thanked me for restoring their work.",
+                    "My mentor vanished after binding a strange tome.",
+                    "A book I discarded came back to me... changed.",
+                    "I am searching for a lost manuscript I read as a child."
+                ],
+                flaws: [
+                    "I compulsively touch every book I see.",
+                    "I sometimes lie about a book's value to keep it.",
+                    "I fear damaging things, even in combat.",
+                    "I obsess over tiny inconsistencies.",
+                    "I secretly rewrite passages I dislike.",
+                    "I am deeply superstitious about bad bindings."
+                ]
+            },
+            {
+                id: "wyrm-reader",
+                title: "Wyrm-Reader of the Ash Quills",
+                category: "Arcane & Dreams",
+                icon: "fa-dragon",
+                quote: "Initiated into the secretive Ash Quill Circle, you trained to decode draconic riddle-texts and interpret dragon lore from smoky, scorched vellum.",
+                skills: ["Insight", "Draconic Lore (Nature/Arcana)"],
+                tools: ["One ceremonial musical instrument"],
+                languages: ["Common", "Draconic"],
+                equipment: "Ceremonial robe marked with ash sigils, draconic riddle-text copy, dragonscale bookmark, bone flute, 15 gp",
+                featureName: "Voice of the Wyrms",
+                featureDesc: "You are respected among those who study dragons or dragonkind. You can identify regional dragon dialects and cultural markers, and you are treated with deference by any scholarly circle focused on dragons. Once per long rest, when making a check to parley or interpret dragon behaviour, you may roll with advantage.",
+                traits: [
+                    "I quote dragon texts like scripture.",
+                    "I am obsessed with dragon hierarchy and etiquette.",
+                    "I view draconic speech as more elegant than Common.",
+                    "I tend to pause dramatically when reading.",
+                    "I admire things that are old, powerful, or terrifying.",
+                    "I write every day in Draconic, even when no one reads it."
+                ],
+                ideals: [
+                    "Respect: Dragons command awe, and we must listen.",
+                    "Understanding: All creatures have reasons, even dragons.",
+                    "Legacy: I will leave behind a wyrm-chronicle of my own.",
+                    "Humility: I serve knowledge, not power.",
+                    "Glory: Speaking to a dragon is the greatest honour.",
+                    "Patience: Knowledge comes slowly, like a dragon's breath."
+                ],
+                bonds: [
+                    "I once translated a threat that saved a village.",
+                    "A dragon knows my name and my worth.",
+                    "My teacher was devoured mid-lesson.",
+                    "I hold a fragment of a dragon prophecy.",
+                    "I wear an amulet shaped like a draconic eye.",
+                    "I saw a wyrmling born from parchment and spell."
+                ],
+                flaws: [
+                    "I secretly long to become a dragon.",
+                    "I overestimate my place in the world.",
+                    "I take offence when others mispronounce Draconic words.",
+                    "I dream of fire and wake trembling.",
+                    "I believe a dragon's spirit watches me.",
+                    "I cannot destroy draconic writing, even when dangerous."
+                ]
+            },
+            {
+                id: "keeper-last-lantern",
+                title: "Keeper of the Last Lantern",
+                category: "Vaults & Stealth",
+                icon: "fa-lantern",
+                quote: "You served as a silent watcher in Candlekeep's most isolated corners, maintaining wards and listening to the whispers of ancient stacks.",
+                skills: ["Perception", "Stealth"],
+                tools: ["Tinker's tools"],
+                languages: ["Common", "Deep Speech, Undercommon, or Sylvan"],
+                equipment: "Old hooded lantern that never needs refuelling, ring of brass keys, wax tablet with etched notes, half-empty scented oil bottle, 12 gp",
+                featureName: "Lantern's Watch",
+                featureDesc: "You always know the quickest, safest route through large libraries, ruins, or archives, even if you have never visited them before. You can navigate maze-like structures without becoming lost and may sense if a place is being magically observed. In Candlekeep, initiates and lower-ranked Avowed treat you with quiet respect.",
+                traits: [
+                    "I speak only when I must.",
+                    "I am calm even in the face of horror.",
+                    "I do not fear the dark: I work in it.",
+                    "I keep a list of every strange sound I've heard.",
+                    "I do not knock—I listen.",
+                    "I value silence over noise, always."
+                ],
+                ideals: [
+                    "Vigilance: I must keep the dark corners safe.",
+                    "Endurance: A quiet watch is the strongest defence.",
+                    "Clarity: Light reveals, but the dark conceals wisdom too.",
+                    "Secrecy: Some doors must stay shut.",
+                    "Solitude: I trust my own company best.",
+                    "Balance: Light and dark must exist in harmony."
+                ],
+                bonds: [
+                    "I found a locked door with no hinges, and I cannot forget it.",
+                    "I keep the name of a vanished colleague hidden on my lantern.",
+                    "A child once followed me where they should not have.",
+                    "I carry a sliver of something that should not exist.",
+                    "A creature whispered a truth I now protect.",
+                    "I lit the last lantern once—and saw too much."
+                ],
+                flaws: [
+                    "I cannot stand loud noises.",
+                    "I distrust open spaces.",
+                    "I fear losing my lantern more than my life.",
+                    "I sometimes forget to speak for days.",
+                    "I keep secrets that make me sweat at night.",
+                    "I believe the dark is trying to speak to me."
+                ]
+            },
+            {
+                id: "ink-wrought-devotee",
+                title: "Ink-Wrought Devotee",
+                category: "Arcane & Dreams",
+                icon: "fa-signature",
+                quote: "Belonging to a sect believing true knowledge must be carved onto flesh, your history and sacred diagrams are tattooed directly onto your body.",
+                skills: ["Religion", "Medicine"],
+                tools: ["Calligrapher's supplies"],
+                languages: ["Common", "One of your choice"],
+                equipment: "Set of inked needles, flask of rare ink, roll of linen bandages, cracked mirror, 10 gp",
+                featureName: "Living Archive",
+                featureDesc: "You can recall any passage, diagram, or image you have tattooed or personally copied onto skin, whether yours or someone else's. You may spend one minute to commit a short passage to memory perfectly, provided you transcribe or inscribe it.",
+                traits: [
+                    "I speak in proverbs from the texts on my skin.",
+                    "I believe pain is a fair price for wisdom.",
+                    "I avoid mirrors—I see too much in them.",
+                    "I trace the tattoos on my arms when I'm nervous.",
+                    "I am constantly searching for blank flesh.",
+                    "I treat books as sacred relics."
+                ],
+                ideals: [
+                    "Sacrifice: I give myself to knowledge, utterly.",
+                    "Truth: The body lies, but the ink endures.",
+                    "Memory: Nothing should ever be forgotten.",
+                    "Mystery: Understanding comes in fragments.",
+                    "Freedom: I left the sect to make my own meanings.",
+                    "Discipline: I continue my rites to honour the past."
+                ],
+                bonds: [
+                    "My first tattoo was inked by someone long dead.",
+                    "I hide a name written on me that should not be known.",
+                    "I search for a missing page that completes a larger work.",
+                    "My back holds a diagram that no one has deciphered.",
+                    "Someone wants to steal my skin for what's on it.",
+                    "I vowed never to tattoo again... but I will, one last time."
+                ],
+                flaws: [
+                    "I believe the ink speaks to me.",
+                    "I secretly regret every mark.",
+                    "I cannot stop recording things, even personal moments.",
+                    "I hide my tattoos in shame.",
+                    "I refuse healing magic if it risks damaging my skin.",
+                    "I fear someone will one day read me completely."
+                ]
+            },
+            {
+                id: "vellum-binder-apprentice",
+                title: "Vellum-Binder's Apprentice",
+                category: "Crafts & Binding",
+                icon: "fa-scroll",
+                quote: "You learned to tan hides, layer enchantments into paper, and construct bindings that resist time, fire, or madness.",
+                skills: ["Arcana", "Sleight of Hand"],
+                tools: ["Leatherworker's tools"],
+                languages: ["Common", "One of your choice"],
+                equipment: "Bone-handled knife for scraping vellum, thick ink-stained apron, spool of enchanted thread, half-finished miniature codex, 10 gp",
+                featureName: "Hands of the Binder",
+                featureDesc: "You can craft or restore books of exceptional quality given proper tools and time. You can identify whether a book's binding holds any magical or alchemical properties at a glance. You are also always welcome in binderies, scriptoriums, and scroll-vaults.",
+                traits: [
+                    "I treat damaged books like injured friends.",
+                    "I talk to my tools as I work.",
+                    "I always notice how a book is made before I read it.",
+                    "I judge people by the state of their books.",
+                    "I am obsessive about proper storage and handling.",
+                    "I get ink or glue on everything I touch."
+                ],
+                ideals: [
+                    "Preservation: My craft preserves the thoughts of ages.",
+                    "Precision: Every stitch, fold, and cut matters.",
+                    "Beauty: Books should be beautiful as well as wise.",
+                    "Secrecy: Hidden knowledge deserves hidden bindings.",
+                    "Innovation: I invent new forms of preservation.",
+                    "Devotion: Binding is a sacred act."
+                ],
+                bonds: [
+                    "I once saved a spellbook by rebinding it in silence.",
+                    "I was apprenticed to a master who vanished mid-task.",
+                    "I carry a codex no one else can open.",
+                    "A famous author entrusted me with their final draft.",
+                    "My own hands are stained with cursed dye.",
+                    "I seek a lost book that resists all bindings."
+                ],
+                flaws: [
+                    "I struggle to read books I did not bind myself.",
+                    "I hoard scraps, pages, and covers obsessively.",
+                    "I fear imperfection more than failure.",
+                    "I sometimes value books over people.",
+                    "I am jealous of finer binders.",
+                    "I once bound something that should never have been bound."
+                ]
+            },
+            {
+                id: "erudite-duelist",
+                title: "Quill of the Erudite Duelist",
+                category: "Social & Lore",
+                icon: "fa-feather",
+                quote: "Studied in Candlekeep's debating salons, logic was your blade, and scholarly pride your shield in duels of philosophy and arcane theory.",
+                skills: ["History", "Persuasion"],
+                tools: ["Gaming set of choice"],
+                languages: ["Common", "One of your choice"],
+                equipment: "Silver-edged quill pen, scroll of duel protocols, pouch of powdered chalk, salon signet, 15 gp",
+                featureName: "Scholar's Riposte",
+                featureDesc: "When engaged in intellectual disputes, you can quickly sense rhetorical weaknesses and recall obscure but relevant information. Once per day, you can ask the DM for a useful insight during a conversation, debate, or interrogation, granting advantage on a single Charisma check tied to the interaction.",
+                traits: [
+                    "I treat every conversation like a sparring match.",
+                    "I speak in long, elegant sentences even under stress.",
+                    "I never forget a slight, especially an intellectual one.",
+                    "I mark my victories and defeats in a private book.",
+                    "I enjoy mocking those who take things too seriously.",
+                    "I hate being interrupted mid-thought."
+                ],
+                ideals: [
+                    "Truth: Through argument, the truth emerges.",
+                    "Mastery: There is no higher art than pure logic.",
+                    "Wit: Words win wars more cleanly than swords.",
+                    "Pride: I must never lose a duel of minds.",
+                    "Tact: Knowing when not to speak is wisdom too.",
+                    "Freedom: Everyone has the right to speak and be heard."
+                ],
+                bonds: [
+                    "I was bested once and have never let it go.",
+                    "I defend my salon's honour wherever I go.",
+                    "A rival carries a secret I want buried.",
+                    "I composed a thesis that Candlekeep rejected.",
+                    "I debate in memory of a sibling I lost to silence.",
+                    "I once bested a ghost in argument... or so I claim."
+                ],
+                flaws: [
+                    "I condescend even when I do not mean to.",
+                    "I cannot walk away from a challenge.",
+                    "I mock those I consider slow.",
+                    "I use words to wound more often than to help.",
+                    "I rarely admit when I'm wrong.",
+                    "I believe every problem can be solved with a clever phrase."
+                ]
+            },
+            {
+                id: "caretaker-last-shelf",
+                title: "Caretaker of the Last Shelf",
+                category: "Vaults & Stealth",
+                icon: "fa-box-archive",
+                quote: "Tending the most neglected corners—shelves beneath stairwells and forgotten alcoves—you found stories the world had left behind.",
+                skills: ["Insight", "Survival"],
+                tools: ["Artisan's tools of choice"],
+                languages: ["Common", "One of your choice"],
+                equipment: "Lantern with a green-tinted lens, moth-eaten Candlekeep robe, journal filled with unusual marginalia, title-less book, 12 gp",
+                featureName: "Forgotten Corners",
+                featureDesc: "You instinctively notice when something is being overlooked or hidden, whether in a room, a collection, or a group of people. When searching an area, you may ask the DM to reveal one small but significant detail others would have missed.",
+                traits: [
+                    "I prefer dust and quiet to people and noise.",
+                    "I collect stories others have thrown away.",
+                    "I find comfort in places no one else visits.",
+                    "I dislike being observed while I work.",
+                    "I remember every book I have ever touched.",
+                    "I speak in whispers, even when I don't need to."
+                ],
+                ideals: [
+                    "Restoration: Nothing is too broken to mend.",
+                    "Memory: What is forgotten shapes us as much as what is known.",
+                    "Patience: All things reveal themselves in time.",
+                    "Respect: Even the humblest book deserves care.",
+                    "Mystery: The forgotten holds the deepest truths.",
+                    "Solitude: Some truths are meant to be found alone."
+                ],
+                bonds: [
+                    "I once found a sentient book and still seek it.",
+                    "I repaired a page that changed my life.",
+                    "A wing I cared for collapsed, and I blame myself.",
+                    "I know of a book Candlekeep refuses to acknowledge.",
+                    "I left a note in every volume I cared for.",
+                    "I'm trying to find where a certain shelf used to be."
+                ],
+                flaws: [
+                    "I struggle to connect with the present.",
+                    "I hoard abandoned things, even when I shouldn't.",
+                    "I prefer books to people, always.",
+                    "I cannot let go of a failure long past.",
+                    "I lose track of time when I'm around books.",
+                    "I keep secrets that should have been reported."
+                ]
+            }
+        ];
+
+        /* State Variables */
+        let selectedBackground = BACKGROUNDS_DATA[0];
+        let currentCategoryFilter = "all";
+        let rolledTraits = null;
+        let isAudioMuted = false;
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
+        }
+
+        function playPageTurnSound() {
+            if (isAudioMuted) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            const now = ctx.currentTime;
+            const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.2, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.15;
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(500, now);
+            filter.frequency.exponentialRampToValueAtTime(1200, now + 0.18);
+            filter.Q.value = 2.0;
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0.01, now);
+            gain.gain.linearRampToValueAtTime(0.2, now + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            noise.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+            noise.start(now);
+        }
+
+        function playDiceSound() {
+            if (isAudioMuted) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            for (let i = 0; i < 5; i++) {
+                const delay = i * 0.06 + Math.random() * 0.02;
+                const now = ctx.currentTime + delay;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(200 + Math.random() * 300, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.05);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(now); osc.stop(now + 0.05);
+            }
+        }
+
+        function playChimeSound() {
+            if (isAudioMuted) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            const now = ctx.currentTime;
+            [523.25, 659.25, 783.99].forEach((freq, idx) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(now + idx * 0.08); osc.stop(now + idx * 0.08 + 0.4);
+            });
+        }
+
+        function renderBackgroundsList() {
+            const container = document.getElementById('backgrounds-list');
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            
+            const filtered = BACKGROUNDS_DATA.filter(bg => {
+                const matchesCategory = (currentCategoryFilter === 'all' || bg.category === currentCategoryFilter);
+                const matchesSearch = bg.title.toLowerCase().includes(searchVal) ||
+                                      bg.featureName.toLowerCase().includes(searchVal) ||
+                                      bg.skills.some(s => s.toLowerCase().includes(searchVal)) ||
+                                      bg.tools.some(t => t.toLowerCase().includes(searchVal));
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="p-6 text-center text-amber-300/60 font-medieval bg-black/40 rounded-xl border border-amber-900/30">
+                        <i class="fa-solid fa-scroll text-2xl mb-2 text-amber-700"></i>
+                        <p>No Candlekeep records match your search criteria.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(bg => {
+                const isActive = bg.id === selectedBackground.id;
+                return `
+                    <div onclick="selectBackground('${bg.id}')" class="parchment-card p-3.5 rounded-xl cursor-pointer ${isActive ? 'active-card' : ''}">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid ${bg.icon} text-amber-900 text-sm"></i>
+                                <h3 class="font-title text-sm md:text-base font-bold text-amber-950">${bg.title}</h3>
+                            </div>
+                            <span class="text-[10px] font-medieval px-2 py-0.5 rounded bg-amber-900/20 text-amber-900 border border-amber-900/30">${bg.category}</span>
+                        </div>
+                        <p class="font-body text-xs text-neutral-800 line-clamp-2 italic mb-2">"${bg.quote}"</p>
+                        <div class="flex flex-wrap gap-1 text-[11px] font-title">
+                            <span class="bg-red-950/10 text-red-950 px-2 py-0.5 rounded border border-red-950/20 font-bold">
+                                <i class="fa-solid fa-graduation-cap mr-1"></i>${bg.skills.join(', ')}
+                            </span>
+                            <span class="bg-amber-900/10 text-amber-900 px-2 py-0.5 rounded border border-amber-900/20">
+                                <i class="fa-solid fa-bolt mr-1"></i>${bg.featureName}
+                            </span>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function selectBackground(id) {
+            const bg = BACKGROUNDS_DATA.find(item => item.id === id);
+            if (!bg) return;
+            selectedBackground = bg;
+            rolledTraits = null; // reset rolled traits when switching
+            playPageTurnSound();
+            renderBackgroundsList();
+            renderTomeDisplay();
+            
+            // Scroll smoothly on mobile
+            if (window.innerWidth < 1024) {
+                document.getElementById('detail-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function setCategoryFilter(cat) {
+            currentCategoryFilter = cat;
+            document.querySelectorAll('.chip-btn').forEach(btn => {
+                if (btn.dataset.category === cat) {
+                    btn.className = 'chip-btn active-chip px-2.5 py-1 rounded-md bg-amber-900/80 text-amber-200 border border-amber-600/60 transition';
+                } else {
+                    btn.className = 'chip-btn px-2.5 py-1 rounded-md bg-black/40 text-amber-400/80 border border-amber-900/40 hover:bg-amber-950 transition';
+                }
+            });
+            renderBackgroundsList();
+        }
+
+        function filterBackgrounds() {
+            renderBackgroundsList();
+        }
+
+        function renderTomeDisplay() {
+            const bg = selectedBackground;
+            const container = document.getElementById('tome-display');
+
+            container.innerHTML = `
+                <div>
+                    <!-- Header -->
+                    <div class="border-b-2 border-amber-900/30 pb-4 mb-6">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="font-medieval text-xs px-3 py-1 rounded-full bg-amber-900/20 text-amber-900 border border-amber-900/30 uppercase tracking-wider font-bold">
+                                <i class="fa-solid ${bg.icon} mr-1.5"></i> ${bg.category}
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="rollRandomTraits()" class="px-3 py-1.5 rounded-lg bg-amber-950 hover:bg-amber-900 text-amber-200 border border-amber-700/60 font-medieval text-xs shadow-md transition transform hover:scale-105 active:scale-95 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-dice-d6 text-amber-400"></i>
+                                    <span>Roll Traits (d6)</span>
+                                </button>
+                                <button onclick="copyBackgroundSummary()" class="px-3 py-1.5 rounded-lg bg-red-950 hover:bg-red-900 text-red-100 border border-red-700/60 font-medieval text-xs shadow-md transition transform hover:scale-105 active:scale-95 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-copy"></i>
+                                    <span>Copy Summary</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <h2 class="font-header text-2xl md:text-3xl font-bold text-amber-950 uppercase tracking-wide">
+                            ${bg.title}
+                        </h2>
+                        <p class="font-body text-base md:text-lg italic text-neutral-800 mt-2 leading-relaxed">
+                            "${bg.quote}"
+                        </p>
+                    </div>
+
+                    <!-- Proficiencies & Specs Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm font-body">
+                        <div class="bg-amber-950/5 p-3.5 rounded-lg border border-amber-900/20 space-y-1.5">
+                            <p class="font-title text-xs font-bold text-amber-950 uppercase tracking-wider">
+                                <i class="fa-solid fa-graduation-cap text-amber-800 mr-1.5"></i>Skill Proficiencies
+                            </p>
+                            <p class="text-neutral-900 font-semibold">${bg.skills.join(', ')}</p>
+                        </div>
+                        <div class="bg-amber-950/5 p-3.5 rounded-lg border border-amber-900/20 space-y-1.5">
+                            <p class="font-title text-xs font-bold text-amber-950 uppercase tracking-wider">
+                                <i class="fa-solid fa-screwdriver-wrench text-amber-800 mr-1.5"></i>Tool Proficiencies
+                            </p>
+                            <p class="text-neutral-900 font-semibold">${bg.tools.join(', ')}</p>
+                        </div>
+                        <div class="bg-amber-950/5 p-3.5 rounded-lg border border-amber-900/20 space-y-1.5">
+                            <p class="font-title text-xs font-bold text-amber-950 uppercase tracking-wider">
+                                <i class="fa-solid fa-language text-amber-800 mr-1.5"></i>Languages
+                            </p>
+                            <p class="text-neutral-900 font-semibold">${bg.languages.join(', ')}</p>
+                        </div>
+                        <div class="bg-amber-950/5 p-3.5 rounded-lg border border-amber-900/20 space-y-1.5">
+                            <p class="font-title text-xs font-bold text-amber-950 uppercase tracking-wider">
+                                <i class="fa-solid fa-pouch-gold text-amber-800 mr-1.5"></i>Equipment
+                            </p>
+                            <p class="text-neutral-900 font-semibold text-xs leading-relaxed">${bg.equipment}</p>
+                        </div>
+                    </div>
+
+                    <!-- Feature Box -->
+                    <div class="bg-gradient-to-r from-amber-950/10 via-amber-900/5 to-amber-950/10 p-4 rounded-xl border-l-4 border-amber-900 mb-8 shadow-sm">
+                        <h3 class="font-title text-base font-bold text-amber-950 uppercase tracking-wider mb-1.5 flex items-center gap-2">
+                            <i class="fa-solid fa-key text-amber-800"></i>
+                            <span>Feature: ${bg.featureName}</span>
+                        </h3>
+                        <p class="font-body text-base text-neutral-900 leading-relaxed text-justify">
+                            ${bg.featureDesc}
+                        </p>
+                    </div>
+
+                    <!-- Generated Trait Summary Banner (If rolled) -->
+                    ${rolledTraits ? `
+                    <div class="mb-8 p-4 rounded-xl bg-amber-950 text-amber-100 border border-amber-600/80 shadow-xl space-y-2 animate-fade-in font-body">
+                        <div class="flex items-center justify-between border-b border-amber-700/50 pb-2">
+                            <span class="font-medieval text-xs text-amber-400 uppercase tracking-wider">
+                                <i class="fa-solid fa-dice text-amber-400 mr-1"></i> Generated Character Profile (d6 Rolled)
+                            </span>
+                            <span class="text-xs font-title text-amber-300 font-bold">d6: [T:${rolledTraits.tIdx+1}, I:${rolledTraits.iIdx+1}, B:${rolledTraits.bIdx+1}, F:${rolledTraits.fIdx+1}]</span>
+                        </div>
+                        <p class="text-xs"><strong>Trait:</strong> "${bg.traits[rolledTraits.tIdx]}"</p>
+                        <p class="text-xs"><strong>Ideal:</strong> "${bg.ideals[rolledTraits.iIdx]}"</p>
+                        <p class="text-xs"><strong>Bond:</strong> "${bg.bonds[rolledTraits.bIdx]}"</p>
+                        <p class="text-xs"><strong>Flaw:</strong> "${bg.flaws[rolledTraits.fIdx]}"</p>
+                    </div>` : ''}
+
+                    <!-- Suggested Characteristics Tables -->
+                    <div class="space-y-6">
+                        <h3 class="font-header text-lg md:text-xl font-bold text-amber-950 uppercase border-b border-amber-900/30 pb-2">
+                            Suggested Characteristics
+                        </h3>
+
+                        ${renderTraitTable("Personality Traits", bg.traits, rolledTraits ? rolledTraits.tIdx : null)}
+                        ${renderTraitTable("Ideals", bg.ideals, rolledTraits ? rolledTraits.iIdx : null)}
+                        ${renderTraitTable("Bonds", bg.bonds, rolledTraits ? rolledTraits.bIdx : null)}
+                        ${renderTraitTable("Flaws", bg.flaws, rolledTraits ? rolledTraits.fIdx : null)}
+                    </div>
+                </div>
+
+                <!-- Footer Signature -->
+                <div class="mt-10 pt-4 border-t border-amber-900/30 flex items-center justify-between text-xs font-title text-amber-900/80">
+                    <span>Candlekeep Archives • Codex background</span>
+                    <span>Classified: Avowed</span>
+                </div>
+            `;
+        }
+
+        function renderTraitTable(title, list, highlightedIdx) {
+            return `
+                <div class="space-y-2">
+                    <h4 class="font-title text-xs font-bold text-amber-950 uppercase tracking-wider">${title}</h4>
+                    <div class="border border-amber-900/20 rounded-lg overflow-hidden bg-amber-950/5">
+                        ${list.map((item, idx) => `
+                            <div class="flex items-start gap-3 p-2.5 text-xs font-body text-neutral-900 border-b border-amber-900/10 last:border-0 ${highlightedIdx === idx ? 'rolled-highlight' : ''}">
+                                <span class="font-title font-bold text-amber-950 min-w-[20px] text-right">${idx + 1}.</span>
+                                <span>${item}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function rollRandomTraits() {
+            playDiceSound();
+            const tIdx = Math.floor(Math.random() * 6);
+            const iIdx = Math.floor(Math.random() * 6);
+            const bIdx = Math.floor(Math.random() * 6);
+            const fIdx = Math.floor(Math.random() * 6);
+
+            rolledTraits = { tIdx, iIdx, bIdx, fIdx };
+            renderTomeDisplay();
+            showToast("Rolled d6 traits for " + selectedBackground.title + "!");
+        }
+
+        function copyBackgroundSummary() {
+            const bg = selectedBackground;
+            let text = `=== CANDLEKEEP BACKGROUND: ${bg.title.toUpperCase()} ===\n`;
+            text += `Category: ${bg.category}\n`;
+            text += `Skills: ${bg.skills.join(', ')}\n`;
+            text += `Tools: ${bg.tools.join(', ')}\n`;
+            text += `Languages: ${bg.languages.join(', ')}\n`;
+            text += `Equipment: ${bg.equipment}\n\n`;
+            text += `FEATURE: ${bg.featureName}\n${bg.featureDesc}\n\n`;
+
+            if (rolledTraits) {
+                text += `=== ROLLED PROFILE (d6) ===\n`;
+                text += `Trait: ${bg.traits[rolledTraits.tIdx]}\n`;
+                text += `Ideal: ${bg.ideals[rolledTraits.iIdx]}\n`;
+                text += `Bond: ${bg.bonds[rolledTraits.bIdx]}\n`;
+                text += `Flaw: ${bg.flaws[rolledTraits.fIdx]}\n`;
+            }
+
+            // Clipboard copy with fallback
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    playChimeSound();
+                    showToast("Background copied to clipboard!");
+                }).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            playChimeSound();
+            showToast("Background copied to clipboard!");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function toggleAudio() {
+            isAudioMuted = !isAudioMuted;
+            const soundIcon = document.getElementById('sound-icon');
+            const soundText = document.getElementById('sound-text');
+            if (isAudioMuted) {
+                soundIcon.className = 'fa-solid fa-volume-xmark text-red-400';
+                soundText.innerText = 'Sound OFF';
+            } else {
+                soundIcon.className = 'fa-solid fa-volume-high text-amber-400';
+                soundText.innerText = 'Sound ON';
+                getAudioContext();
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        // Initialize on window load
+        window.onload = function() {
+            renderBackgroundsList();
+            renderTomeDisplay();
+        };
+    </script>
+</body>
+</html>
