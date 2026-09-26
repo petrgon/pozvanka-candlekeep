@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Svitek z Candlekeep - Acquisition and Sanitation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700;900&family=MedievalSharp&family=Tangerine:wght@700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom Font Assignments */
+        .font-header { font-family: 'Cinzel Decorative', serif; }
+        .font-title { font-family: 'Cinzel', serif; }
+        .font-body { font-family: 'Cormorant Garamond', serif; }
+        .font-signature { font-family: 'Tangerine', cursive; }
+        .font-medieval { font-family: 'MedievalSharp', cursive; }
+
+        /* Dark Oak Wooden Background */
+        body {
+            background-color: #0d0705;
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(255, 153, 51, 0.15) 0%, rgba(13, 7, 5, 0.95) 75%),
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 2px, transparent 2px, transparent 4px),
+                linear-gradient(180deg, #180b06 0%, #080302 100%);
+            min-height: 100vh;
+            color: #2c1d11;
+            overflow-x: hidden;
+        }
+
+        /* Candle Ambient Flicker Effect */
+        .candle-glow {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 60vh;
+            background: radial-gradient(circle, rgba(255, 170, 70, 0.18) 0%, rgba(210, 105, 30, 0.08) 45%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            animation: flicker 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.98); }
+            25% { opacity: 1; transform: translate(-49%, -51%) scale(1.02); }
+            50% { opacity: 0.85; transform: translate(-51%, -49%) scale(0.99); }
+            75% { opacity: 0.95; transform: translate(-50%, -52%) scale(1.01); }
+            100% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.0); }
+        }
+
+        /* Parchment Texture & Border Styling */
+        .parchment {
+            background: #e8d3a7;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.3) 0%, rgba(180, 140, 90, 0.2) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.12'/%3E%3C/svg%3E");
+            box-shadow: 
+                0 0 35px rgba(0, 0, 0, 0.9),
+                inset 0 0 80px rgba(90, 50, 20, 0.45),
+                inset 0 0 20px rgba(60, 30, 10, 0.6);
+            border-left: 2px solid rgba(80, 40, 15, 0.5);
+            border-right: 2px solid rgba(80, 40, 15, 0.5);
+        }
+
+        /* Burned / Aged Edges Effect */
+        .burnt-edges {
+            position: relative;
+        }
+        .burnt-edges::before, .burnt-edges::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 12px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .burnt-edges::before {
+            top: 0;
+            background: linear-gradient(to bottom, rgba(40, 20, 5, 0.7), transparent);
+        }
+        .burnt-edges::after {
+            bottom: 0;
+            background: linear-gradient(to top, rgba(40, 20, 5, 0.7), transparent);
+        }
+
+        /* Wooden Rod Rollers */
+        .wooden-rod {
+            background: linear-gradient(90deg, #1b0a03 0%, #4a2511 20%, #7c411d 50%, #4a2511 80%, #1b0a03 100%);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.2);
+        }
+
+        .gold-cap {
+            background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b 60%, #553c06 100%);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.6);
+        }
+
+        /* Crimson Ribbon */
+        .ribbon {
+            background: linear-gradient(90deg, #6b0910 0%, #a81c28 50%, #6b0910 100%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.3);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Wax Seal */
+        .wax-seal {
+            background: radial-gradient(circle at 35% 35%, #6b1d6e 0%, #3d0c40 60%, #1d031f 100%);
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.85),
+                inset 0 2px 4px rgba(255, 200, 255, 0.4),
+                inset 0 -4px 8px rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .wax-seal:hover {
+            transform: scale(1.06);
+            box-shadow: 
+                0 12px 30px rgba(150, 40, 160, 0.4),
+                0 10px 25px rgba(0, 0, 0, 0.9),
+                inset 0 2px 4px rgba(255, 200, 255, 0.5);
+        }
+
+        /* Seal Crack Animation Halves */
+        .seal-half-left, .seal-half-right {
+            transition: transform 0.6s ease-in, opacity 0.5s ease-in;
+        }
+
+        .cracked .seal-half-left {
+            transform: translateX(-40px) rotate(-15deg);
+            opacity: 0;
+        }
+
+        .cracked .seal-half-right {
+            transform: translateX(40px) rotate(15deg);
+            opacity: 0;
+        }
+
+        /* Scroll Unrolling Mechanics */
+        .scroll-body {
+            max-height: 0px;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 1.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
+        }
+
+        .unrolled .scroll-body {
+            max-height: 2400px;
+            opacity: 1;
+        }
+
+        /* Decorative Lettering & Drop Caps */
+        .drop-cap {
+            float: left;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 3.8rem;
+            line-height: 0.8;
+            padding-top: 4px;
+            padding-right: 8px;
+            padding-left: 2px;
+            color: #6b0910;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Print Styling */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .candle-glow, .no-print, .wooden-rod, .gold-cap, #seal-container {
+                display: none !important;
+            }
+            .scroll-body {
+                max-height: none !important;
+                opacity: 1 !important;
+            }
+            .parchment {
+                box-shadow: none !important;
+                background: white !important;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-start min-h-screen p-3 md:p-8 relative selection:bg-amber-900 selection:text-amber-100">
+
+    <div class="candle-glow"></div>
+
+    <!-- Top Action Toolbar -->
+    <header class="no-print z-50 flex flex-wrap items-center justify-between w-full max-w-3xl mb-6 px-4 py-2 bg-black/60 backdrop-blur-md rounded-xl border border-amber-900/40 text-amber-200/80 text-sm shadow-2xl">
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid font-medieval text-amber-500 text-lg">🕯️</i>
+            <span class="font-title text-amber-300 font-bold tracking-wider">CANDLEKEEP ARCHIVES</span>
+        </div>
+        <div class="flex items-center space-x-3 my-1">
+            <button id="sound-toggle-btn" onclick="toggleAudio()" class="px-3 py-1.5 rounded-lg bg-amber-950/80 hover:bg-amber-900 border border-amber-700/50 text-amber-200 text-xs flex items-center gap-2 transition">
+                <i id="sound-icon" class="fa-solid fa-volume-high text-amber-400"></i>
+                <span id="sound-text">Zvuk zapnut</span>
+            </button>
+            <button onclick="toggleFullscreen()" class="px-3 py-1.5 rounded-lg bg-amber-950/80 hover:bg-amber-900 border border-amber-700/50 text-amber-200 text-xs flex items-center gap-2 transition">
+                <i class="fa-solid fa-expand text-amber-400"></i>
+                <span>Celá obrazovka</span>
+            </button>
+            <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-amber-900/60 hover:bg-amber-800 border border-amber-600/50 text-amber-100 text-xs flex items-center gap-2 transition">
+                <i class="fa-solid fa-print"></i>
+                <span>Tisk</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Interactive Scroll Wrapper -->
+    <main id="scroll-wrapper" class="relative z-20 w-full max-w-2xl flex flex-col items-center my-auto transition-all duration-700">
+        
+        <!-- TOP WOODEN ROLLER -->
+        <div class="w-[104%] h-7 md:h-9 wooden-rod rounded-md flex items-center justify-between px-1 relative z-30 shadow-2xl border-y border-amber-950">
+            <div class="w-5 h-9 md:w-7 md:h-11 gold-cap rounded-l-md border-r border-amber-950/80 -ml-3 flex items-center justify-center">
+                <div class="w-2 h-2 rounded-full bg-amber-200/50"></div>
+            </div>
+            <div class="h-full flex-1 mx-2 border-y border-amber-900/30"></div>
+            <div class="w-5 h-9 md:w-7 md:h-11 gold-cap rounded-r-md border-l border-amber-950/80 -mr-3 flex items-center justify-center">
+                <div class="w-2 h-2 rounded-full bg-amber-200/50"></div>
+            </div>
+        </div>
+
+        <!-- ROLLED SCROLL COVER & SEAL (Visible when rolled) -->
+        <div id="rolled-preview" class="w-full bg-gradient-to-r from-amber-950 via-[#d1ba8c] to-amber-950 p-2 relative z-20 transition-all duration-500 burnt-edges shadow-2xl">
+            <!-- Ribbon Across Center -->
+            <div id="scroll-ribbon" class="ribbon absolute top-1/2 left-0 right-0 h-10 md:h-12 -translate-y-1/2 z-20 flex items-center justify-center border-y border-amber-400/30">
+                <div class="w-full h-0.5 bg-amber-300/20 my-auto"></div>
+            </div>
+
+            <!-- Wax Seal Container -->
+            <div id="seal-container" onclick="unrollScroll()" class="relative z-30 my-6 mx-auto w-28 h-28 md:w-32 md:h-32 flex flex-col items-center justify-center cursor-pointer group">
+                <div id="wax-seal" class="wax-seal w-full h-full rounded-full flex items-center justify-center relative overflow-hidden border-2 border-purple-900/80">
+                    
+                    <!-- Left Half of Seal -->
+                    <div class="seal-half-left absolute inset-0 w-1/2 h-full flex items-center justify-end overflow-hidden border-r border-purple-950/40">
+                        <div class="w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/20 flex items-center justify-center translate-x-1/2">
+                            <!-- Candlekeep Castle/Tower Symbol SVG -->
+                            <svg class="w-14 h-14 md:w-16 md:h-16 text-amber-200/80 opacity-90 drop-shadow-md" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2L9 5v2H7v3h10V7h-2V5l-3-3zm-5 9v11h10V11H7zm3 3h4v6h-4v-6z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Right Half of Seal -->
+                    <div class="seal-half-right absolute inset-0 left-1/2 w-1/2 h-full flex items-center justify-start overflow-hidden">
+                        <div class="w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-amber-400/20 flex items-center justify-center -translate-x-1/2">
+                            <svg class="w-14 h-14 md:w-16 md:h-16 text-amber-200/80 opacity-90 drop-shadow-md" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2L9 5v2H7v3h10V7h-2V5l-3-3zm-5 9v11h10V11H7zm3 3h4v6h-4v-6z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Embellished Rim & Sigil Text -->
+                    <div class="absolute inset-1 rounded-full border border-purple-400/30 pointer-events-none flex items-center justify-center">
+                        <span class="font-title text-[9px] md:text-[10px] tracking-widest text-amber-200/60 uppercase -rotate-45 font-bold">CANDLEKEEP</span>
+                    </div>
+                </div>
+
+                <!-- Click Instruction Callout -->
+                <div id="unroll-hint" class="absolute -bottom-10 whitespace-nowrap bg-amber-950/90 text-amber-200 text-xs md:text-sm px-4 py-1.5 rounded-full border border-amber-600/50 shadow-lg font-medieval animate-bounce">
+                    <i class="fa-solid fa-hand-pointer mr-1.5 text-amber-400"></i> Klikni na pečeť pro otevření svitku
+                </div>
+            </div>
+        </div>
+
+        <!-- PARCHMENT CONTENT CONTAINER -->
+        <div id="scroll-body" class="scroll-body parchment w-full burnt-edges relative z-10 px-6 md:px-12 py-8 md:py-12 shadow-2xl">
+            
+            <!-- Header Section -->
+            <div class="text-center mb-8 pb-6 border-b-2 border-amber-900/30">
+                <!-- Decorative Top Emblem -->
+                <div class="flex items-center justify-center gap-3 mb-3 text-amber-900/70">
+                    <span class="h-0.5 w-12 bg-amber-900/40"></span>
+                    <i class="fa-solid fa-book-bookmark text-xl"></i>
+                    <span class="h-0.5 w-12 bg-amber-900/40"></span>
+                </div>
+                
+                <h1 class="font-header text-xl md:text-2xl font-bold tracking-wider text-amber-950 uppercase mb-2">
+                    CANDLEKEEP
+                </h1>
+                
+                <div class="font-title text-sm md:text-base text-red-950 font-bold tracking-widest uppercase bg-amber-900/10 py-1.5 px-4 rounded border border-amber-900/20 inline-block">
+                    Adresát: Člen řádu Avowed <span class="text-xs font-normal capitalize block md:inline md:ml-1">(Do vlastních rukou)</span>
+                </div>
+            </div>
+
+            <!-- Letter Body Text ( Czech ) -->
+            <div class="font-body text-base md:text-xl text-neutral-900 leading-relaxed text-justify space-y-5">
+                
+                <!-- Salutation -->
+                <p class="font-title font-bold text-lg md:text-xl text-amber-950 mb-4">
+                    Vážený člene řádu,
+                </p>
+
+                <!-- Paragraph 1 -->
+                <p>
+                    <span class="drop-cap">J</span>ménem <strong>Great Readers</strong> a na přímý rozkaz archmága <strong>Janussiho</strong>, úřadujícího <strong>Keeper of Tomes</strong>, Vám tímto svěřuji úkol, který nesnese odkladu.
+                </p>
+
+                <!-- Paragraph 2 -->
+                <p>
+                    <strong>Candlekeep</strong> je po staletí největší baštou vědění, avšak zjišťujeme, že ne každá vědomost touží odpočívat v klidu. V posledních měsících čelíme bezprecedentnímu nárůstu anomálií. Zabezpečené knihy mizí ze svých zapečetěných komor, dochází k nekontrolovanému otevírání nestabilních demirovin a z prastarých textů prosakují do reality nebezpečné entity.
+                </p>
+
+                <!-- Paragraph 3 -->
+                <p>
+                    Z nařízení archmága <strong>Janussiho</strong> proto s okamžitou platností vzniká specializovaná úderná skupina: <strong class="text-red-950 font-title font-semibold tracking-wide">Acquisition and Sanitation</strong> (tým vyšetřovatelů pro <strong>Avowed</strong>).
+                </p>
+
+                <!-- Paragraph 4 -->
+                <p>
+                    Na základě Vašich dosavadních činů, dovedností a diskrétnosti jsem Vás pro tento úkol osobně vybral. Vaší povinností bude lokalizovat, zabezpečit a neutralizovat paranormální hrozby uvnitř hradeb <strong>Candlekeep</strong> i mimo ně.
+                </p>
+
+                <!-- Paragraph 5 -->
+                <p>
+                    Pokud uznáte za vhodné k tomuto úkolu přizvat externí dobrodruhy se specifickou specializací, máte k tomu mé plné zmocnění. Všechny tyto asistenty zvenčí je však nutné před vstupem do vnitřních prostor řádně prověřit – výběr i prověření těchto osob nechávám plně ve Vaší režii a na Vaší zodpovědnost.
+                </p>
+
+                <!-- Paragraph 6 -->
+                <p class="bg-amber-950/5 p-4 rounded-lg border-l-4 border-amber-900 italic">
+                    Záležitost je mimořádně urgentní. Členy vznikající jednotky očekávám do 2 dnů v <strong>Inner Ward</strong>, konkrétně u <strong>Pillars of Pedagogy</strong>. Prokázáním se tímto listem u <strong>Emerald Door</strong> Vám i Vašemu týmu bude udělen potřebný přístup k Vaší nové operační základně.
+                </p>
+            </div>
+
+            <!-- Sign-off & Signature Section -->
+            <div class="mt-10 pt-6 border-t border-amber-900/30 flex flex-col items-end text-right">
+                <p class="font-title text-sm md:text-base text-amber-950 italic mb-1">
+                    Ve službách vědění,
+                </p>
+                
+                <!-- Handwritten Style Signature -->
+                <div class="font-signature text-4xl md:text-5xl text-red-950 font-bold my-1 tracking-wide transform -rotate-2 select-none">
+                    Bookwyrm
+                </div>
+                
+                <p class="font-title text-xs md:text-sm font-bold text-amber-900 uppercase tracking-wider">
+                    First Reader, Candlekeep
+                </p>
+            </div>
+
+            <!-- Re-roll / Close Button at bottom of scroll -->
+            <div class="no-print mt-10 text-center">
+                <button onclick="rollUpScroll()" class="px-5 py-2 rounded-full bg-amber-950 hover:bg-amber-900 text-amber-200 border border-amber-700/60 font-medieval text-sm shadow-xl transition transform hover:scale-105 active:scale-95 flex items-center gap-2 mx-auto">
+                    <i class="fa-solid fa-scroll text-amber-400"></i>
+                    <span>Znovu svinout svitek</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- BOTTOM WOODEN ROLLER -->
+        <div class="w-[104%] h-7 md:h-9 wooden-rod rounded-md flex items-center justify-between px-1 relative z-30 shadow-2xl border-y border-amber-950">
+            <div class="w-5 h-9 md:w-7 md:h-11 gold-cap rounded-l-md border-r border-amber-950/80 -ml-3 flex items-center justify-center">
+                <div class="w-2 h-2 rounded-full bg-amber-200/50"></div>
+            </div>
+            <div class="h-full flex-1 mx-2 border-y border-amber-900/30"></div>
+            <div class="w-5 h-9 md:w-7 md:h-11 gold-cap rounded-r-md border-l border-amber-950/80 -mr-3 flex items-center justify-center">
+                <div class="w-2 h-2 rounded-full bg-amber-200/50"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* State Variables */
+        let isAudioMuted = false;
+        let isUnrolled = false;
+        let audioCtx = null;
+
+        /* Initialize Web Audio API on first user interaction */
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    audioCtx = new AudioContext();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        /* Sound Effect: Wax Seal Cracking (Synthesized) */
+        function playSealCrackSound() {
+            if (isAudioMuted) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            const now = ctx.currentTime;
+
+            // Noise burst for snap
+            const bufferSize = ctx.sampleRate * 0.15;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.setValueAtTime(1200, now);
+
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0.8, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+
+            noise.start(now);
+
+            // Low frequency crunch
+            const osc = ctx.createOscillator();
+            const oscGain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
+
+            oscGain.gain.setValueAtTime(0.6, now);
+            oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+
+            osc.connect(oscGain);
+            oscGain.connect(ctx.destination);
+
+            osc.start(now);
+            osc.stop(now + 0.15);
+        }
+
+        /* Sound Effect: Parchment Unrolling (Synthesized friction) */
+        function playUnrollSound() {
+            if (isAudioMuted) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            const now = ctx.currentTime;
+            const duration = 1.2;
+            const bufferSize = ctx.sampleRate * duration;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * 0.3;
+            }
+
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(400, now);
+            filter.frequency.linearRampToValueAtTime(800, now + duration * 0.5);
+            filter.frequency.linearRampToValueAtTime(300, now + duration);
+            filter.Q.value = 3.0;
+
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0.01, now);
+            gain.gain.linearRampToValueAtTime(0.35, now + 0.2);
+            gain.gain.linearRampToValueAtTime(0.2, now + 0.8);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+
+            noise.start(now);
+        }
+
+        /* Unroll Action */
+        function unrollScroll() {
+            if (isUnrolled) return;
+            isUnrolled = true;
+
+            // Play audio
+            playSealCrackSound();
+            setTimeout(playUnrollSound, 250);
+
+            // Visual Animations
+            const sealContainer = document.getElementById('seal-container');
+            const ribbon = document.getElementById('scroll-ribbon');
+            const scrollWrapper = document.getElementById('scroll-wrapper');
+            const hint = document.getElementById('unroll-hint');
+
+            sealContainer.classList.add('cracked');
+            if (hint) hint.style.display = 'none';
+
+            if (ribbon) {
+                ribbon.style.opacity = '0';
+                ribbon.style.transform = 'translateY(-50%) scaleX(0.8)';
+            }
+
+            setTimeout(() => {
+                const rolledPreview = document.getElementById('rolled-preview');
+                rolledPreview.style.height = '0px';
+                rolledPreview.style.padding = '0px';
+                rolledPreview.style.opacity = '0';
+                rolledPreview.style.overflow = 'hidden';
+
+                scrollWrapper.classList.add('unrolled');
+            }, 400);
+        }
+
+        /* Roll Up Action (Re-seal/Close) */
+        function rollUpScroll() {
+            if (!isUnrolled) return;
+            isUnrolled = false;
+
+            playUnrollSound();
+
+            const scrollWrapper = document.getElementById('scroll-wrapper');
+            const rolledPreview = document.getElementById('rolled-preview');
+            const sealContainer = document.getElementById('seal-container');
+            const ribbon = document.getElementById('scroll-ribbon');
+            const hint = document.getElementById('unroll-hint');
+
+            scrollWrapper.classList.remove('unrolled');
+
+            setTimeout(() => {
+                rolledPreview.style.height = 'auto';
+                rolledPreview.style.padding = '';
+                rolledPreview.style.opacity = '1';
+
+                sealContainer.classList.remove('cracked');
+                if (hint) hint.style.display = 'block';
+
+                if (ribbon) {
+                    ribbon.style.opacity = '1';
+                    ribbon.style.transform = 'translateY(-50%) scaleX(1)';
+                }
+            }, 800);
+        }
+
+        /* Audio Toggle */
+        function toggleAudio() {
+            isAudioMuted = !isAudioMuted;
+            const soundIcon = document.getElementById('sound-icon');
+            const soundText = document.getElementById('sound-text');
+
+            if (isAudioMuted) {
+                soundIcon.className = 'fa-solid fa-volume-xmark text-red-400';
+                soundText.innerText = 'Zvuk vypnut';
+            } else {
+                soundIcon.className = 'fa-solid fa-volume-high text-amber-400';
+                soundText.innerText = 'Zvuk zapnut';
+                getAudioContext();
+            }
+        }
+
+        /* Fullscreen Toggle */
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
